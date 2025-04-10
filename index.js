@@ -29,11 +29,12 @@ import cors from "cors"
 const app = express()
 app.use(express.json())
 
+const port = process.env.PORT || 3000
 
 //Cors me permite especificar que DOMINIO tiene acceso a realizar peticiones a mi servidor
 app.use(cors(
     {
-        origin: ['http://localhost:5731', 'http://127.0.0.1:5500', 'http://localhost:3000']
+        origin: ['http://localhost:5731', 'http://127.0.0.1:5500', 'http://localhost:https://servidorviajestienda.onrender.com']
     }
 
 ))
@@ -210,7 +211,7 @@ app.delete('/api/Viajes/eliminar/:id', async (req, res) => {
 
 mongoose.connect("mongodb+srv://jjanjor:qo5GsGaQ58DQWeV9@viajesbd.jjdaru7.mongodb.net/?retryWrites=true&w=majority&appName=ViajesBD")
     .then(() => {
-        app.listen(3000, () => {
+        app.listen(port, () => {
             console.log("Server en 3000 y base de datos conectada")
         })
     })
