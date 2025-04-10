@@ -34,7 +34,8 @@ const port = process.env.PORT || 3000
 //Cors me permite especificar que DOMINIO tiene acceso a realizar peticiones a mi servidor
 app.use(cors(
     {
-        origin: ['http://localhost:5173', 'http://127.0.0.1:5500', 'https://servidorviajesmitienda.onrender.com']
+        origin: ['http://localhost:5173', 'http://127.0.0.1:5500', 'https://servidorviajesmitienda.onrender.com'],
+        methods: ['GET', 'POST', 'PUT', 'DELETE']
     }
 
 ))
