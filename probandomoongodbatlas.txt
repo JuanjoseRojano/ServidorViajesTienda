@@ -30,10 +30,54 @@ fetch('http://localhost:3000/api/products/anadir', {
 
 
 
-    "destino":"Roma",
-  "imagen":[""],
-  "salida":["Málaga","Sevilla","Madrid"],
-  "horariosDeVuelo":["20:34","1:45","6:45"],
-    "diasDeLaSemana":["Domingo","Lunes","Martes"],
-  "precio":90,
-  "numeroDeAsientosAvion":200
+    destino:"Roma",
+  imagen:[""],
+  salida:["Málaga","Sevilla","Madrid"],
+  horariosDeVuelo:["20:34","1:45","6:45"],
+    diasDeLaSemana:["Domingo","Lunes","Martes"],
+  precio:90,
+  numeroDeAsientosAvion:200,
+  numeroDeAsientosRestantes:200
+
+
+
+
+
+
+//Ejemplo simple de mapa
+
+
+
+  import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
+import { useState } from 'react';
+import 'leaflet/dist/leaflet.css';
+
+function LocationMarker({ onClickMap }) {
+  useMapEvents({
+    click(e) {
+      const { lat, lng } = e.latlng;
+      onClickMap({ lat, lng });
+    },
+  });
+  return null;
+}
+
+export default function MapSelector() {
+  const [position, setPosition] = useState(null);
+
+  const handleMapClick = ({ lat, lng }) => {
+    setPosition({ lat, lng });
+    // Aquí puedes enviar las coords al backend o buscar aeropuerto cercano
+    console.log('Coordenadas clicadas:', lat, lng);
+  };
+
+  return (
+    <MapContainer center={[40, -3]} zoom={5} style={{ height: '500px', width: '100%' }}>
+      <TileLayer
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      />
+      <LocationMarker onClickMap={handleMapClick} />
+      {position && <Marker position={[position.lat, position.lng]} />}
+    </MapContainer>
+  );
+}
