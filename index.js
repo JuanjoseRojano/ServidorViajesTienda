@@ -30,7 +30,7 @@ const port = process.env.PORT || 3000
 //Cors me permite especificar que DOMINIO tiene acceso a realizar peticiones a mi servidor
 app.use(cors(
     {
-        origin: ['http://localhost:5173', 'http://127.0.0.1:5500', 'https://servidorviajesmitienda.onrender.com', 'http://localhost:3000']
+        origin: ['http://localhost:5173', 'http://127.0.0.1:5500', 'https://servidorviajesmitienda.onrender.com', 'http://localhost:3000', 'http://anepsa.vercel.app']
         ,
         methods: ['GET', 'POST', 'PUT', 'DELETE']
     }
@@ -164,7 +164,7 @@ app.get('/api/Viajes', async (req, res) => {
             mensaje: error.mensaje
         })
     }
-});
+})
 
 //Obtener usuarios
 app.get('/api/Usuarios', async (req, res) => {
@@ -176,25 +176,25 @@ app.get('/api/Usuarios', async (req, res) => {
             mensaje: error.mensaje
         })
     }
-});
+})
 
 //Añadir viajes
 app.post('/api/Viajes/add', async (req, res) => {
     try {
-        const nuevoVuelo = await Vuelo.create(req.body);
-        res.status(201).json(nuevoVuelo);
+        const nuevoVuelo = await Vuelo.create(req.body)
+        res.status(201).json(nuevoVuelo)
     } catch (error) {
-        res.status(400).json({ message: "Error al crear producto", error: error.message });
+        res.status(400).json({ message: "Error al crear producto", error: error.message })
     }
 })
 
 //Añadir usuarios
 app.post('/api/Usuarios/add', async (req, res) => {
     try {
-        const nuevoUsuario = await Usuario.create(req.body);
-        res.status(201).json(nuevoUsuario);
+        const nuevoUsuario = await Usuario.create(req.body)
+        res.status(201).json(nuevoUsuario)
     } catch (error) {
-        res.status(400).json({ message: "Error al crear producto", error: error.message });
+        res.status(400).json({ message: "Error al crear producto", error: error.message })
     }
 })
 
@@ -226,22 +226,22 @@ app.delete('/api/Usuarios/eliminar/:id', async (req, res) => {
     try {
         const { id } = req.params
         const usuarioEliminado = await Usuario.findByIdAndDelete(id)
-        res.status(201).json(usuarioEliminado);
+        res.status(201).json(usuarioEliminado)
     } catch (error) {
-        res.status(400).json({ message: "Error al crear producto", error: error.message });
+        res.status(400).json({ message: "Error al crear producto", error: error.message })
     }
-});
+})
 
 //Eliminar viajes
 app.delete('/api/Viajes/eliminar/:id', async (req, res) => {
     try {
         const { id } = req.params
         const vueloEliminado = await Vuelo.findByIdAndDelete(id)
-        res.status(201).json(vueloEliminado);
+        res.status(201).json(vueloEliminado)
     } catch (error) {
-        res.status(400).json({ message: "Error al crear producto", error: error.message });
+        res.status(400).json({ message: "Error al crear producto", error: error.message })
     }
-});
+})
 
 
 
@@ -257,15 +257,42 @@ app.delete('/api/Usuarios/:id/viajes/:idVueloUsuario', async (req, res) => {
             req.params.id,
             { $pull: { viajes: { _id: req.params.idVueloUsuario } } },
             { new: true }
-        );
+        )
 
         if (!usuario) {
-            return res.status(404).json({ message: 'Usuario no encontrado' });
+            return res.status(404).json({ message: 'Usuario no encontrado' })
         }
 
-        res.status(200).json({ message: 'Viaje eliminado', usuario });
+        res.status(200).json({ message: 'Viaje eliminado', usuario })
     } catch (error) {
-        res.status(400).json({ message: 'Error al eliminar viaje', error: error.message });
+        res.status(400).json({ message: 'Error al eliminar viaje', error: error.message })
+    }
+})
+
+//PUT infernal
+app.put('/api/Usuarios/:id/viajes/:idVueloUsuario', async (req, res) => {
+    try {
+        const usuario = await Usuario.findOneAndUpdate(
+            {
+                _id: req.params.id,
+                "viajes._id": req.params.idVueloUsuario
+            },
+            {
+                $set: {
+                    "viajes.$.salida": req.body.salida,
+                    "viajes.$.horarioDeVuelo": req.body.horarioDeVuelo,
+                    "viajes.$.fechaDeVuelo": req.body.fechaDeVuelo,
+                    "viajes.$.precioDelVueloFinal": req.body.precioDelVueloFinal,
+                    "viajes.$.numeroDeBilletes": req.body.numeroDeBilletes,
+                    "viajes.$.idaYVuelta": req.body.idaYVuelta
+                }
+            },
+            { new: true }
+        )
+
+        res.status(200).json({ message: 'Viaje actualizado', usuario })
+    } catch (error) {
+        res.status(400).json({ message: 'Error al actualizar viaje', error: error.message })
     }
 })
 
@@ -275,10 +302,10 @@ app.delete('/api/Usuarios/:id/viajes/:idVueloUsuario', async (req, res) => {
 //Actualizar vuelo tras comprar billete
 app.put('/api/Viajes/:id', async (req, res) => {
     try {
-        const vueloActualizado = await Vuelo.findByIdAndUpdate(req.params.id, req.body, { new: true });
-        res.status(200).json(vueloActualizado);
+        const vueloActualizado = await Vuelo.findByIdAndUpdate(req.params.id, req.body, { new: true })
+        res.status(200).json(vueloActualizado)
     } catch (error) {
-        res.status(400).json({ message: "Error al actualizar vuelo", error: error.message });
+        res.status(400).json({ message: "Error al actualizar vuelo", error: error.message })
     }
 })
 
@@ -294,20 +321,20 @@ app.put('/api/Usuarios/:id/viajes/:idVueloUsuario', async (req, res) => {
 
 
         // Busco en el array el viaje concreto por id
-        const viaje = usuario.viajes.id(req.params.idVueloUsuario);
+        const viaje = usuario.viajes.id(req.params.idVueloUsuario)
 
 
         // Recorro el viaje para qe asi se pueda actualizar cualquier cosa
         Object.keys(req.body).forEach(key => {
-            viaje[key] = req.body[key];
+            viaje[key] = req.body[key]
         })
 
         // Con save permito que se guarden los cambios realizados puedo no puedo anidar con findbyidandupdate
-        await usuario.save();
+        await usuario.save()
 
-        res.status(200).json(usuario);
+        res.status(200).json(usuario)
     } catch (error) {
-        res.status(400).json({ message: "Error al actualizar viaje", error: error.message });
+        res.status(400).json({ message: "Error al actualizar viaje", error: error.message })
     }
 })
 
