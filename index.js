@@ -28,18 +28,18 @@ app.use(express.json())
 const port = process.env.PORT || 3000
 
 //Cors me permite especificar que DOMINIO tiene acceso a realizar peticiones a mi servidor
-app.use(cors(
-    {
-        origin: ['http://localhost:5173', 'http://127.0.0.1:5500', 'https://servidorviajesmitienda.onrender.com', 'http://localhost:3000', 'https://anepsa.vercel.app']
+// app.use(cors(
+//     {
+//         // origin: ['http://localhost:5173', 'http://127.0.0.1:5500', 'https://servidorviajesmitienda.onrender.com', 'http://localhost:3000', 'https://anepsa.vercel.app']
 
-        // origin: '*'
-        ,
-        methods: ['GET', 'POST', 'PUT', 'DELETE'],
-        allowedHeaders: ['Content-Type', 'Authorization'],
-    }
+//         origin: '*'
+//         ,
+//         methods: ['GET', 'POST', 'PUT', 'DELETE'],
+//         allowedHeaders: ['Content-Type', 'Authorization'],
+//     }
+// ))
 
-))
-
+app.use(cors())
 
 //Esquemas de la base de datos
 const VuelosSchema = mongoose.Schema(
