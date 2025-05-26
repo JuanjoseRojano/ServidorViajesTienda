@@ -22,7 +22,9 @@ import cors from "cors"
 
 
 
+
 const app = express()
+app.use(cors())
 app.use(express.json())
 
 const port = process.env.PORT || 3000
@@ -39,7 +41,6 @@ const port = process.env.PORT || 3000
 //     }
 // ))
 
-app.use(cors())
 
 //Esquemas de la base de datos
 const VuelosSchema = mongoose.Schema(
@@ -158,7 +159,7 @@ app.get('/', (req, res) => {
 
 
 //Obtener viajes
-app.get('/api/Viajes', async (req, res) => {
+app.get('/api/Viajes', cors(), async (req, res) => {
     try {
         const datosViajes = await Vuelo.find({})
         res.status(200).json(datosViajes)
@@ -170,7 +171,7 @@ app.get('/api/Viajes', async (req, res) => {
 })
 
 //Obtener usuarios
-app.get('/api/Usuarios', async (req, res) => {
+app.get('/api/Usuarios', cors(), async (req, res) => {
     try {
         const datosUsuarios = await Usuario.find({})
         res.status(200).json(datosUsuarios)
