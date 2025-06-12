@@ -1,3 +1,5 @@
+// https://github.com/jamj2000/nxapi-mongodb
+//fetch(url).then(res=>res.json()).then(data=>console.log(data))
 import express from 'express'
 import mongoose from 'mongoose'
 import cors from "cors"
@@ -156,7 +158,7 @@ const UsuarioSchema = mongoose.Schema(
 const Vuelo = mongoose.model("viajes", VuelosSchema)
 const Usuario = mongoose.model("usuario", UsuarioSchema)
 //Este creo que sobra
-const VuelosUsuario = mongoose.model("vuelosUsuarioSchema", VuelosUsuarioSchema)
+// const VuelosUsuario = mongoose.model("vuelosUsuarioSchema", VuelosUsuarioSchema)
 
 
 app.get('/', (req, res) => {
@@ -176,7 +178,7 @@ app.get('/api/Viajes', cors(), async (req, res) => {
         })
     }
 })
-
+//Sirve
 //Obtener usuarios
 app.get('/api/Usuarios', cors(), async (req, res) => {
     try {
@@ -190,7 +192,7 @@ app.get('/api/Usuarios', cors(), async (req, res) => {
 })
 
 //Añadir viajes
-app.post('/api/Viajes/add', async (req, res) => {
+app.post('/api/Viajes', async (req, res) => {
     try {
         const nuevoVuelo = await Vuelo.create(req.body)
         res.status(201).json(nuevoVuelo)
@@ -199,8 +201,9 @@ app.post('/api/Viajes/add', async (req, res) => {
     }
 })
 
+//Sirve
 //Añadir usuarios
-app.post('/api/Usuarios/add', async (req, res) => {
+app.post('/api/Usuarios', async (req, res) => {
     try {
         const nuevoUsuario = await Usuario.create(req.body)
         res.status(201).json(nuevoUsuario)
@@ -209,8 +212,9 @@ app.post('/api/Usuarios/add', async (req, res) => {
     }
 })
 
+//Sirve
 //Añadir viaje al usuario
-app.post('/api/Usuarios/add/:id/viajes', async (req, res) => {
+app.post('/api/Usuarios/:id/viajes', async (req, res) => {
     try {
         const { id } = req.params
         const nuevoViaje = req.body
@@ -231,9 +235,9 @@ app.post('/api/Usuarios/add/:id/viajes', async (req, res) => {
 
 
 
-
+//Sirve
 //Eliminar usuario
-app.delete('/api/Usuarios/eliminar/:id', async (req, res) => {
+app.delete('/api/Usuarios/:id', async (req, res) => {
     try {
         const { id } = req.params
         const usuarioEliminado = await Usuario.findByIdAndDelete(id)
@@ -244,7 +248,7 @@ app.delete('/api/Usuarios/eliminar/:id', async (req, res) => {
 })
 
 //Eliminar viajes
-app.delete('/api/Viajes/eliminar/:id', async (req, res) => {
+app.delete('/api/Viajes/:id', async (req, res) => {
     try {
         const { id } = req.params
         const vueloEliminado = await Vuelo.findByIdAndDelete(id)
@@ -359,3 +363,4 @@ mongoose.connect("mongodb+srv://jjanjor:qo5GsGaQ58DQWeV9@viajesbd.jjdaru7.mongod
     .catch(() => {
         console.log("Sin conexion")
     })
+
